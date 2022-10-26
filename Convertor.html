@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <title>Convertor</title>
+</head>
+
+<body style="background-color: rgba(223, 223, 170, 0.358);">
+
+    <div class="container" style="
+    display: flex;
+    align-content: space-around;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 40%;
+    height: 150px;
+    margin: 150px auto;
+    background-color: rgba(255, 255, 20, 0.358);
+    box-shadow: 2px 2px 10px 3px grey;
+    border-radius: 20px;">
+
+        <input type="number" class="inp">
+
+        <button class="btn">Convetr!</button>
+        <div class="result"></div>
+    </div>
+
+</body>
+
+<style>
+    .inp {
+        margin: 20px 5px 20px 20px;
+        width: 15vw;
+        height: 30px;
+        box-shadow: 0 0 3px rgb(44, 68, 33) inset;
+        background-color: rgb(218, 253, 234);
+        outline: none;
+        border: none;
+        padding-left: 10px;
+        text-align: center;
+        line-height: 18px;
+        font-size: 18px;
+        font-weight: 700;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: rgb(55, 70, 17);
+        border-top-left-radius: 40px;
+        border-bottom-left-radius: 40px;
+    }
+
+    .btn {
+        border-top-right-radius: 40px;
+        border-bottom-right-radius: 40px;
+        background-color: rgba(255, 145, 0, 0.658);
+        margin: 0;
+        position: relative;
+        right: 5px;
+        top: 20.5px;
+        width: 5vw;
+        height: 30.5px;
+        border: none;
+        text-align: center;
+        line-height: 15px;
+        font-size: 15px;
+        font-weight: 700;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0.2px 0 1.5px 1px rgb(115, 115, 115);
+    }
+
+    .btn:active {
+        background-color: rgba(237, 134, 0, 0.729);
+        box-shadow: 0.2px 0 1.5px 1px rgb(115, 115, 115) inset;
+    }
+
+    .result {
+        margin: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        min-height: 40px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 600;
+    }
+</style>
+
+<script>
+
+    let raw_num = 0;
+
+    let str = [];
+    let arr = [];
+
+    let numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+
+    let teens = ['ten', 'eleven', 'twelve', 'thirteen', 'forteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']
+
+    let digits = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+    document.querySelector('.inp').oninput = () => {
+        document.querySelector('.inp').value = Math.trunc(+document.querySelector('.inp').value);
+        if (document.querySelector('.inp').value > 999999) {
+            document.querySelector('.inp').value = 999999;
+        }
+    }
+
+    document.querySelector('.btn').onclick = () => {
+        str = [];
+        arr = [];
+        raw_num = document.querySelector('.inp').value;
+        let num = Math.trunc(Math.abs(raw_num));
+        num += '';
+        for (let i = 0; i < num.length; i++) {
+            arr[i] = num[i];
+        }
+
+        arr.reverse();
+
+        console.log('arr length: ' + arr.length);
+        console.log('arr: ' + arr);
+        if (arr.length > 0) {
+            if (arr.length == 1) {
+                str[0] = numbers[arr[0] - 1];
+            }
+            if (arr.length > 1) {
+                if (arr.length > 2) {
+                    if (arr[2] != 0) {
+                        if (arr[2] == 1) {
+                            str[2] = 'hundred';
+                        }
+                        else {
+                            str[2] = 'hundreds';
+                        }
+                        str[3] = numbers[arr[2] - 1];
+                    }
+                    if (arr.length > 3) {
+                        if (arr[3] == 1) {
+                            str[4] = 'thousand';
+                        }
+                        else {
+                            str[4] = 'thousands';
+                        }
+                        if (arr.length == 4) {
+                            str[5] = numbers[arr[3] - 1];
+                        }
+                        if (arr.length == 5 && arr[4] == 1) {
+                            str[5] = teens[arr[3]];
+                            str[4] = 'thousands';
+                        }
+                        else {
+                            str[5] = numbers[arr[3] - 1];
+                            str[6] = digits[arr[4] - 2];
+                        }
+                        if (arr.length > 5) {
+                            if (arr[5] == 1) {
+                                str[7] = 'hundred';
+                            }
+                            else {
+                                str[7] = 'hundreds';
+                            }
+                            str[8] = numbers[arr[5] - 1];
+                        }
+                    }
+                }
+                if (arr[1] == 1) {
+                    str[0] = teens[arr[0]];
+                }
+                else {
+                    if (arr[0] == 0) {
+                        str[0] = digits[arr[1] - 2];
+                    }
+                    else {
+                        str[0] = numbers[arr[0] - 1];
+                        str[1] = digits[arr[1] - 2];
+                    }
+
+                }
+            }
+        }
+
+        str.reverse();
+
+        let temp_str = [];
+        let string = '';
+
+        for (let i = 0; i < str.length; i++) {
+            if (typeof (str[i]) == typeof ('qwe')) {
+                temp_str.push(str[i]);
+            }
+        }
+
+        for (let i = 0; i < temp_str.length; i++) {
+            string += temp_str[i] + ' ';
+        }
+
+        if (+raw_num < 0) {
+            string = 'minus ' + string;
+        }
+
+        if (+raw_num === 0) {
+            string = 'null';
+        }
+
+        document.querySelector('.result').textContent = string;
+    }
+
+
+
+
+
+
+</script>
+
+</html>
